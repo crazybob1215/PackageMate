@@ -1,13 +1,11 @@
 ![animated demo of the client application](img/demo.gif)
 <p align="center"><em>PackageMate: Self-hosted package tracking!</em></p>
 
-This is a simple app using MongoDB, Express.js, React, and Node to allow a user
-to create _package_ records and fetch their status from the carriers' APIs
-(or scraping, sometimes).
+**Note:** This is a fork of jat255's PackageMate with the primary difference being that it uses json files to store package info rather than a database.
 
-**Note:** This app was made as a full-stack app learning experience, so it certainly has some 
-roughness around the edges, and I'm not responsible if it causes your packages to burst into 
-flames...
+This is a simple app using Json, Express.js, React, and Node to allow a user to create _package_ records and fetch their status from the carriers' APIs (or scraping, sometimes).
+
+**Note:** This app was made as a full-stack app learning experience, so it certainly has some roughness around the edges, and I'm not responsible if it causes your packages to burst into flames... (additional note from crazybob1215: I'm adding additional jank to this by just changing the info storage methodology, so keep in mind that there are two layers of jank-ness going on)
 
 It requires access to the carriers' API tools, which differs a bit for each carrier. The
 following links have more information on how to create accounts and get credentials.
@@ -50,24 +48,18 @@ The project is built using Node, and so can be run (with a few modifications) by
 the standard `npm start` approach (check the `package.json` files for more details about
 the scripts that it uses).
 
-Since there are a couple moving parts however, it is easier to get up and running using
-[Docker](www.docker.com) (specifically, [docker compose](https://docs.docker.com/compose/)).
-The `docker-compose.yml` file specifies three containers that will communicate with each
-other to run the app: a MongoDB database for data storage, a Node/Express server that 
-does the API checks/scraping, and a React client application that you interact with in
-the browser.
+Since there are a couple moving parts however, it is easier to get up and running using [Docker](www.docker.com) (specifically, [docker compose](https://docs.docker.com/compose/)). The `docker-compose.yml` file specifies two containers that will communicate with each other to run the app: a Node/Express server that does the API checks/scraping, and a React client application that you interact with in the browser.
 
 ### Clone or download the project using git:
 
 ```sh
-$ git clone https://github.com/jat255/PackageMate.git
+$ git clone https://github.com/crazybob1215/PackageMate.git
 $ cd PackageMate
 ```
 
 Once this has downloaded, rename the `.env.example` file to `.env`, and replace the values 
-indicated with ones that make sense for you. The two API credentials you obtained for
-UPS and USPS, and then the username and password for the MongoDB instance you will create
-(can be anything, they don't _really_ matter).
+indicated with ones that make sense for you (the two API credentials you obtained for
+UPS and USPS).
 
 ### Build the Docker images and run the app
 
@@ -78,7 +70,7 @@ $ docker-compose up --build -d
 ```
 
 The first time this is run, it will take quite some time, since it will go through
-and build the three docker images (and the server requires a number of dependencies
+and build the two docker images (and the server requires a number of dependencies
 since `playwright` uses a headless version of Chromium for scraping). The `-d` flag
 tells Docker to detach after bringing up all the containers. `--build` tells it
 to build (or rebuild) the containers. Assuming all went well,
@@ -105,12 +97,6 @@ existing volumes using:
 
 ```sh
 $ docker volume list
-```
-
-Then to remove the `dbdata` volume:
-
-```sh
-$ docker volume rm packagemate_dbdata 
 ```
 
 ## Using the app
